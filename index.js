@@ -30,7 +30,13 @@ app.use(express.json())
 
 //Rotas
 app.get("/", (req, res) => {
-  res.render("index");
+  Pergunta.findAll({raw: true}) // {raw: true} mostra apenas os dados que importam da table
+  .then(perguntas => {
+    console.log(perguntas);
+    res.render("index", {
+      perguntas: perguntas // enviar os dados da table para a view
+    });
+  }); // Equivalente à "SELECT * FROM perguntas"
 });
 
 app.get("/perguntar", (req, res) => {

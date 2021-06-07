@@ -3,7 +3,21 @@
   <%- include('./partials/navbar') %>
   <div class="container">
     <div class="row">
-      
+      <div>
+        <h1 class="text-center m-4">Lista de perguntas feitas</h1>
+      </div>
+      <!-- Listar dados da table perguntas -->
+      <%  perguntas.forEach(pergunta => { %>
+        <div class="card mt-4 mb-4">
+          <div class="card-body">
+            <h3><%= pergunta.titulo %></h3>
+            <p><%= pergunta.descricao %></p>
+          </div>
+          <div class="card-footer">
+            <button class="btn btn-primary">Responder</button>
+          </div>
+        </div>  
+      <%  }) %> 
     </div>    
   </div>
 </body>
