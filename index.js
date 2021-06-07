@@ -1,5 +1,19 @@
+// importando o express
 const express = require('express');
 const app = express();
+
+// importando a connection do banco de dados
+const connection = require("./database/database");
+
+// Conectar com o banco de dados
+connection
+  .authenticate()
+  .then(() => {
+    console.log("Conexão com o banco de dados feita.");
+  })
+  .catch((msgErro) => {
+    console.log(msgErro);
+  });
 
 //Setar o EJS para renderizar o HTML
 app.set('view engine', 'ejs');
