@@ -4,9 +4,10 @@ const app = express();
 
 // importando a connection do banco de dados
 const connection = require("./database/database");
+const Pergunta = require('./database/perguntas');
 
 //Importar model perguntas
-const perguntaModel = require("./database/perguntas");
+const pergunta = require("./database/perguntas");
 
 // Conectar com o banco de dados
 connection
@@ -39,7 +40,17 @@ app.get("/perguntar", (req, res) => {
 app.post("/salvarpergunta", (req, res) => {
   var titulo = req.body.titulo;
   var descricao = req.body.descricao;
-  res.send("titulo da pergunta= " + titulo + "  | descrição da pergunta= " + descricao);
+  Pergunta.create({ // Equivalente ao "INSERT INTO PERGUNTAS" do mysql
+    titulo: titulo,
+    descricao: descricao
+  })
+  .then(() => {
+    console.log('Pergunta salva no banco de dados.');
+    res.redirect('/');
+  })
+  .catch((msgErroPerguntas) => {
+    console.log("Ocorreu um erro ao salvar dados no banco: " + msgErroPerguntas);
+  }); 
 });
 
 app.listen(8080, (error) => {

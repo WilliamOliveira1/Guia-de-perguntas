@@ -6,11 +6,11 @@ const connection  = require('./database');
 // Model para perguntas
 // Criar table para banco de dados
 const Pergunta = connection.define('pergunta', { // Pergunta nome da table
-    título: { // primeiro elemento da table
+    titulo: { // primeiro elemento da table
         type: Sequelize.STRING, // Dessa forma para textos curtos
         allowNull: false // Define que o valor não seja nulo
     },
-    descrição: {
+    descricao: {
         type: Sequelize.TEXT, // Para textos longos
         allowNull: false // Define que o valor não seja nulo
     }
@@ -19,3 +19,5 @@ const Pergunta = connection.define('pergunta', { // Pergunta nome da table
 Pergunta.sync({force: false}).then(() => { // o false é caso a table exista para não forçar a criação
     console.log("Tabela criada.")
 }) 
+
+module.exports = Pergunta;
