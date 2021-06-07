@@ -5,6 +5,9 @@ const app = express();
 // importando a connection do banco de dados
 const connection = require("./database/database");
 
+//Importar model perguntas
+const perguntaModel = require("./database/perguntas");
+
 // Conectar com o banco de dados
 connection
   .authenticate()
