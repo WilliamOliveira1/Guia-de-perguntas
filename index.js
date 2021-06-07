@@ -5,6 +5,12 @@ const app = express();
 app.set('view engine', 'ejs');
 app.use(express.static('public'));
 
+// Configurar o body-parser
+app.use(express.urlencoded({extended: false}));
+app.use(express.json())
+
+
+//Rotas
 app.get("/", (req, res) => {
   res.render("index");
 });
@@ -14,7 +20,9 @@ app.get("/perguntar", (req, res) => {
 });
 
 app.post("/salvarpergunta", (req, res) => {
-  res.send("Formulario enviado");
+  var titulo = req.body.titulo;
+  var descricao = req.body.descricao;
+  res.send("titulo da pergunta= " + titulo + "  | descrição da pergunta= " + descricao);
 });
 
 app.listen(8080, (error) => {
