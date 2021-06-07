@@ -26,6 +26,7 @@ app.use(express.static('public'));
 
 *documento express para rotas*
 > https://expressjs.com/pt-br/guide/routing.html
+
 *documento express para API's*
 >https://expressjs.com/pt-br/4x/api.html
 
@@ -35,5 +36,6 @@ app.use(express.static('public'));
 
 *Para o sequelize trabalhar com MySql*
 > npm install --save mysql2
+
 *documentos do Sequelize*
 > https://sequelize.org/master/
