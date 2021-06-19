@@ -4,10 +4,10 @@ const app = express();
 
 // importando a connection do banco de dados
 const connection = require("./database/database");
-const Pergunta = require('./database/perguntas');
-
 //Importar model perguntas
-const pergunta = require("./database/perguntas");
+const Pergunta = require('./database/perguntas');
+//Importar model respostas
+const Resposta = require("./database/resposta");
 
 // Conectar com o banco de dados
 connection
@@ -30,7 +30,9 @@ app.use(express.json())
 
 //Rotas
 app.get("/", (req, res) => {
-  Pergunta.findAll({raw: true}) // {raw: true} mostra apenas os dados que importam da table
+  Pergunta.findAll({raw: true, order: [
+    ['id', 'DESC'] // ASC = ordem crescente | DESC = ordem decrescente
+  ]}) // {raw: true} mostra apenas os dados que importam da table
   .then(perguntas => {
     console.log(perguntas);
     res.render("index", {
@@ -44,8 +46,8 @@ app.get("/perguntar", (req, res) => {
 });
 
 app.post("/salvarpergunta", (req, res) => {
-  var titulo = req.body.titulo;
-  var descricao = req.body.descricao;
+  let titulo = req.body.titulo;
+  let descricao = req.body.descricao;
   Pergunta.create({ // Equivalente ao "INSERT INTO PERGUNTAS" do mysql
     titulo: titulo,
     descricao: descricao
@@ -58,6 +60,45 @@ app.post("/salvarpergunta", (req, res) => {
     console.log("Ocorreu um erro ao salvar dados no banco: " + msgErroPerguntas);
   }); 
 });
+
+app.get("/pergunta/:id", (req, res) => {
+  let id = req.params.id;
+
+  Pergunta.findOne({ //Buscar um item na tabela de dados
+    where: {id: id}
+  })
+  .then(pergunta => {
+    if(pergunta != undefined) { // Pergunta encontrada
+      Resposta.findAll({
+        where: {perguntaId: pergunta.id},
+        order: [
+          ['id', 'ASC'] // ASC = ordem crescente | DESC = ordem decrescente        
+        ]
+      })
+      .then(respostas => {
+        res.render("pergunta", {
+          pergunta : pergunta,
+          respostas: respostas
+        });
+      });      
+    }else {
+      res.redirect("/");
+    }
+  });  
+});
+
+app.post("/responder", (req, res) => {
+  let corpo = req.body.corpo;
+  let perguntaId = req.body.pergunta;
+
+  Resposta.create({
+    corpo: corpo,
+    perguntaId: perguntaId
+  })
+  .then(() => {
+    res.redirect("/pergunta/"+ perguntaId);
+  });
+})
 
 app.listen(8080, (error) => {
   if(error) {
